@@ -20,13 +20,14 @@ const getUsers = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return next(
-      new HttpError('Invalid inputs passed, please check your data.', 422)
-    );
-  }
-
+  // const errors = validationResult(req);
+  // console.log("reached here ============")
+  // if (!errors.isEmpty()) {
+  //   return next(
+  //     new HttpError('Invalid inputs passed, please check your data.', 422)
+  //   );
+  // }
+  console.log(req)
   const { name, email, password } = req.body;
 
   let existingUser;
@@ -50,8 +51,10 @@ const signup = async (req, res, next) => {
 
   let hashedPassword;
   try {
-    hashedPassword = await bcrypt.hash(password, 12);
+    console.log(password)
+    hashedPassword = await bcrypt.hash("123456", 12);
   } catch (err) {
+    console.log(err)
     const error = new HttpError(
       'Could not create user, please try again.',
       500

@@ -36,23 +36,32 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   if (req.file) {
+    console.log("going to unlink file", req.file.path);
     fs.unlink(req.file.path, err => {
-      console.log(err);
+      console.log("fs unlink error", err);
     });
   }
+  console.log("============== trying to go to route ==============")
   if (res.headerSent) {
+    console.log("============== headerSent ==============")
     return next(error);
   }
+
+  console.log("============== otherwise default ==============", error.stack)
   res.status(error.code || 500);
   res.json({ message: error.message || 'An unknown error occurred!' });
 });
+// mongoose
+//   .connect(
+//     `mongodb+srv://202212098:siddharth123@cluster0.yfev9.mongodb.net/`
+//   )
 
-mongoose
-  .connect(
-    `mongodb+srv://202212098:siddharth123@cluster0.yfev9.mongodb.net/`
-  )
+  mongoose.connect('mongodb+srv://202212098:siddharth123@cluster0.yfev9.mongodb.net/testdb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => {
-    app.listen(5000);
+    app.listen(5001);
   })
   .catch(err => {
     console.log(err);

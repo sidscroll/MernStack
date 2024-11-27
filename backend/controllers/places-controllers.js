@@ -65,11 +65,12 @@ const getPlacesByUserId = async (req, res, next) => {
 const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(errors);
     return next(
       new HttpError('Invalid inputs passed, please check your data.', 422)
     );
   }
-
+console.log(req.body)
   const { title, description, address } = req.body;
 
   let coordinates;
@@ -78,7 +79,7 @@ const createPlace = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
-
+  
   const createdPlace = new Place({
     title,
     description,
@@ -114,6 +115,7 @@ const createPlace = async (req, res, next) => {
     await user.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
+    console.log("DB error", err);
     const error = new HttpError(
       'Creating place failed, please try again.',
       500
