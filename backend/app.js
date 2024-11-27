@@ -36,18 +36,15 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   if (req.file) {
-    console.log("going to unlink file", req.file.path);
     fs.unlink(req.file.path, err => {
       console.log("fs unlink error", err);
     });
   }
-  console.log("============== trying to go to route ==============")
   if (res.headerSent) {
-    console.log("============== headerSent ==============")
     return next(error);
   }
 
-  console.log("============== otherwise default ==============", error.stack)
+  console.log(error.stack)
   res.status(error.code || 500);
   res.json({ message: error.message || 'An unknown error occurred!' });
 });
